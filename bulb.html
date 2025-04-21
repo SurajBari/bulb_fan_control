@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Red Glow Bulb + Center Fan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .bulb-glow {
+      fill: #ff4d4d;
+      filter: drop-shadow(0 0 15px red) drop-shadow(0 0 25px red);
+      transition: all 0.3s ease;
+    }
+
+    .bulb-off {
+      fill: #4b5563;
+      filter: none;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .speed-low {
+      animation: spin 3s linear infinite;
+      transform-origin: center;
+    }
+
+    .speed-medium {
+      animation: spin 1.5s linear infinite;
+      transform-origin: center;
+    }
+
+    .speed-high {
+      animation: spin 0.6s linear infinite;
+      transform-origin: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-6 space-y-12">
+
+  <!-- Bulb with Red Glow -->
+  <div class="text-center">
+    <svg id="bulb" xmlns="http://www.w3.org/2000/svg" class="mx-auto w-24 h-24" viewBox="0 0 64 64">
+      <g>
+        <circle cx="32" cy="32" r="20" class="bulb-off"/>
+        <rect x="26" y="52" width="12" height="4" rx="1" fill="#9ca3af"/>
+        <rect x="24" y="56" width="16" height="4" rx="1" fill="#6b7280"/>
+      </g>
+    </svg>
+    <button onclick="toggleBulb()" class="mt-4 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-semibold">
+      Toggle Bulb
+    </button>
+  </div>
+
+  <!-- Fan Section -->
+  <div class="flex flex-col items-center space-y-6">
+    <svg id="fanSVG" width="200" height="250" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Fan Base -->
+      <rect x="60" y="160" width="30" height="20" rx="5" fill="#6B7280"/>
+      <rect x="70" y="140" width="10" height="20" fill="#9CA3AF"/>
+      <!-- Fan Circle Frame -->
+      <circle cx="75" cy="100" r="50" stroke="#9CA3AF" stroke-width="4" fill="#1F2937"/>
+      <!-- Fan Blades -->
+      <g id="fanBlades">
+        <circle cx="75" cy="100" r="5" fill="#F3F4F6"/>
+        <path d="M75 50 Q85 75 75 100 Q65 75 75 50" fill="#60A5FA"/>
+        <path d="M125 100 Q100 110 75 100 Q100 90 125 100" fill="#3B82F6"/>
+        <path d="M75 150 Q65 125 75 100 Q85 125 75 150" fill="#60A5FA"/>
+        <path d="M25 100 Q50 90 75 100 Q50 110 25 100" fill="#3B82F6"/>
+      </g>
+    </svg>
+
+    <!-- Fan Speed Controls -->
+    <div class="space-x-2">
+      <button onclick="setFanSpeed('low')" class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-full font-semibold">Low</button>
+      <button onclick="setFanSpeed('medium')" class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-full font-semibold">Medium</button>
+      <button onclick="setFanSpeed('high')" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-full font-semibold">High</button>
+      <button onclick="setFanSpeed('off')" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-full font-semibold">Off</button>
+    </div>
+  </div>
+
+  <script>
+    let bulbOn = false;
+
+    function toggleBulb() {
+      const bulb = document.querySelector('#bulb circle');
+      bulbOn = !bulbOn;
+      bulb.setAttribute('class', bulbOn ? 'bulb-glow' : 'bulb-off');
+    }
+
+    function setFanSpeed(speed) {
+      const blades = document.getElementById("fanBlades");
+      blades.classList.remove("speed-low", "speed-medium", "speed-high");
+      if (speed === "low") {
+        blades.classList.add("speed-low");
+      } else if (speed === "medium") {
+        blades.classList.add("speed-medium");
+      } else if (speed === "high") {
+        blades.classList.add("speed-high");
+      }
+    }
+
+    // Default fan speed
+    setFanSpeed('low');
+  </script>
+</body>
+</html>
