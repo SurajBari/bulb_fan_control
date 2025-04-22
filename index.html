@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cool-For-You</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
     .bulb-glow {
-      fill: #ff4d4d;
-      filter: drop-shadow(0 0 15px red) drop-shadow(0 0 25px red);
+      filter: drop-shadow(0 0 10px) drop-shadow(0 0 20px);
       transition: all 0.3s ease;
     }
 
@@ -40,33 +40,38 @@
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col justify-between">
+<body id="pageBody" class="bg-gray-900 text-white min-h-screen flex flex-col transition-colors duration-500">
 
   <!-- Sticky Header -->
-  <header class="sticky top-0 z-50 w-full bg-gray-800/80 backdrop-blur shadow-md">
-    <div class="max-w-4xl mx-auto px-4 py-3 text-center text-xl font-bold tracking-wide text-white">
-      COOL YOUR SELF
-    </div>
+  <header class="w-full bg-gray-800 py-4 text-center text-2xl font-bold sticky top-0 z-50 shadow-md">
+    COOL YOUR SELF
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow flex flex-col items-center justify-center p-6 space-y-12">
+  <main class="flex-1 flex flex-col items-center justify-center p-6 space-y-12">
 
-    <!-- Bulb -->
-    <div class="text-center">
+    <!-- Bulb Section -->
+    <div class="text-center relative z-10">
       <svg id="bulb" xmlns="http://www.w3.org/2000/svg" class="mx-auto w-24 h-24" viewBox="0 0 64 64">
         <g>
-          <circle cx="32" cy="32" r="20" class="bulb-off"/>
+          <circle id="bulbGlowCircle" cx="32" cy="32" r="22" fill="none"/>
+          <circle id="bulbCircle" cx="32" cy="32" r="20" class="bulb-off"/>
           <rect x="26" y="52" width="12" height="4" rx="1" fill="#9ca3af"/>
           <rect x="24" y="56" width="16" height="4" rx="1" fill="#6b7280"/>
         </g>
       </svg>
-      <button onclick="toggleBulb()" class="mt-4 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-semibold">
-        Toggle Bulb
-      </button>
+
+      <!-- Bulb Controls -->
+      <div class="mt-4 space-x-2">
+        <button onclick="setLight('red')" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full font-semibold">Red</button>
+        <button onclick="setLight('white')" class="px-4 py-2 bg-white hover:bg-gray-200 text-black rounded-full font-semibold">White</button>
+        <button onclick="setLight('blue')" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-semibold">Blue</button>
+        <button onclick="setLight('green')" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-full font-semibold">Green</button>
+        <button onclick="turnOffLight()" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-full font-semibold">Off</button>
+      </div>
     </div>
 
-    <!-- Fan -->
+    <!-- Fan Section -->
     <div class="flex flex-col items-center space-y-6">
       <svg id="fanSVG" width="200" height="250" viewBox="0 0 150 200" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="60" y="160" width="30" height="20" rx="5" fill="#6B7280"/>
@@ -81,7 +86,7 @@
         </g>
       </svg>
 
-      <!-- Fan Controls -->
+      <!-- Fan Speed Controls -->
       <div class="space-x-2">
         <button onclick="setFanSpeed('low')" class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-full font-semibold">Low</button>
         <button onclick="setFanSpeed('medium')" class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black rounded-full font-semibold">Medium</button>
@@ -89,41 +94,21 @@
         <button onclick="setFanSpeed('off')" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-full font-semibold">Off</button>
       </div>
     </div>
+
   </main>
 
-  <!-- Footer -->
-  <footer class="w-full border-t border-gray-700 py-3">
-    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between text-sm text-gray-400">
-      <p>&copy; <span id="year"></span> <strong>Suraj Bari</strong>. All rights reserved.</p>
-      <div class="flex space-x-4 mt-2 sm:mt-0">
-        <a href="https://github.com/" target="_blank" aria-label="GitHub" class="hover:text-white transition">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 008.1 11c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.5-4-1.5-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1 1.6 1 .9 1.6 2.4 1.1 3 .8.1-.7.4-1.1.7-1.4-2.7-.3-5.5-1.4-5.5-6.2 0-1.4.5-2.5 1.3-3.4-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.4 1.3a11.5 11.5 0 016.2 0c2.4-1.6 3.4-1.3 3.4-1.3.6 1.6.2 2.9.1 3.2.8.9 1.3 2 1.3 3.4 0 4.8-2.8 5.9-5.5 6.2.4.4.8 1 .8 2.1v3.1c0 .3.2.7.8.6A11.5 11.5 0 0023.5 12C23.5 5.73 18.27.5 12 .5z"/>
-          </svg>
-        </a>
-        <a href="https://linkedin.com/" target="_blank" aria-label="LinkedIn" class="hover:text-white transition">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M4.98 3.5A2.5 2.5 0 002.5 6c0 1.38 1.12 2.5 2.5 2.5S7.5 7.38 7.5 6a2.5 2.5 0 00-2.52-2.5zM2.5 9h5v12h-5V9zm7.5 0h4.5v1.7c.6-1.1 2-2 3.5-2 3 0 4.5 2 4.5 5.2V21h-5v-5.6c0-1.3-.5-2.2-1.6-2.2-1 0-1.7.7-2 1.5V21h-5V9z"/>
-          </svg>
-        </a>
-        <a href="https://instagram.com/" target="_blank" aria-label="Instagram" class="hover:text-white transition">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20.5h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3.5h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM17.5 6a1 1 0 110 2 1 1 0 010-2z"/>
-          </svg>
-        </a>
-      </div>
+  <!-- Sticky Footer -->
+  <footer class="w-full bg-gray-800 py-3 px-4 text-center text-sm text-white flex flex-wrap items-center justify-between">
+    <span class="w-full md:w-auto text-center md:text-left mb-2 md:mb-0">&copy; 2025 SURAJ BARI. All rights reserved.</span>
+    <div class="flex justify-center space-x-3 w-full md:w-auto">
+      <a href="#" target="_blank"><i class="ph ph-instagram text-xl hover:text-pink-400"></i></a>
+      <a href="#" target="_blank"><i class="ph ph-facebook-logo text-xl hover:text-blue-400"></i></a>
+      <a href="#" target="_blank"><i class="ph ph-github-logo text-xl hover:text-gray-300"></i></a>
     </div>
   </footer>
 
+  <!-- Script -->
   <script>
-    let bulbOn = false;
-
-    function toggleBulb() {
-      const bulb = document.querySelector('#bulb circle');
-      bulbOn = !bulbOn;
-      bulb.setAttribute('class', bulbOn ? 'bulb-glow' : 'bulb-off');
-    }
-
     function setFanSpeed(speed) {
       const blades = document.getElementById("fanBlades");
       blades.classList.remove("speed-low", "speed-medium", "speed-high");
@@ -136,8 +121,52 @@
       }
     }
 
-    setFanSpeed('low');
-    document.getElementById('year').textContent = new Date().getFullYear();
+    function setLight(color) {
+      const bulb = document.getElementById("bulbCircle");
+      const glow = document.getElementById("bulbGlowCircle");
+      const body = document.getElementById("pageBody");
+
+      const colorMap = {
+        red: "#f87171",
+        white: "#f9fafb",
+        blue: "#60a5fa",
+        green: "#34d399"
+      };
+
+      const selectedColor = colorMap[color];
+
+      // Apply glow
+      bulb.setAttribute("fill", selectedColor);
+      glow.setAttribute("fill", selectedColor);
+      glow.setAttribute("opacity", "0.25");
+
+      bulb.classList.remove("bulb-off");
+      bulb.classList.add("bulb-glow");
+
+      bulb.style.filter = `drop-shadow(0 0 10px ${selectedColor}) drop-shadow(0 0 20px ${selectedColor})`;
+
+      // Update background
+      body.style.backgroundColor = selectedColor;
+      body.style.color = "#000";
+    }
+
+    function turnOffLight() {
+      const bulb = document.getElementById("bulbCircle");
+      const glow = document.getElementById("bulbGlowCircle");
+      const body = document.getElementById("pageBody");
+
+      bulb.classList.remove("bulb-glow");
+      bulb.classList.add("bulb-off");
+      bulb.setAttribute("fill", "#4b5563");
+      bulb.style.filter = "none";
+      glow.setAttribute("fill", "none");
+
+      body.style.backgroundColor = "#111827";
+      body.style.color = "#ffffff";
+    }
+
+    // Set default fan speed
+    setFanSpeed("low");
   </script>
 </body>
 </html>
