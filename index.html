@@ -84,8 +84,12 @@
   </div>
 
   <!-- Footer -->
-  <footer class="w-full text-center mt-12 pt-6 border-t border-gray-700">
-    <p class="text-gray-400 text-sm">&copy; Suraj Bari. All rights reserved.</p>
+  <footer class="w-full mt-16 border-t border-gray-700 pt-6">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <p class="text-sm text-gray-500 hover:text-gray-300 transition">
+        &copy; <span id="year"></span> <strong>Suraj Bari</strong>. All rights reserved.
+      </p>
+    </div>
   </footer>
 
   <script>
@@ -111,6 +115,9 @@
 
     // Default fan speed
     setFanSpeed('low');
+
+    // Auto year for footer
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
